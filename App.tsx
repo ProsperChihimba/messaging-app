@@ -19,15 +19,10 @@ export default function App() {
 
   const [userId, setUserId] = useState("");
 
-  const [selectedChannel, setSelectedChannel] = useState<any>(null);
-
   useEffect(() => {
     return () => client.disconnectUser();
   }, []);
 
-  const onChannelPressed = (channel) => {
-    setSelectedChannel(channel);
-  }
 
   if (!isLoadingComplete) {
     return null;

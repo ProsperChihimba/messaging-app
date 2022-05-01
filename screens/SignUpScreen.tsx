@@ -25,7 +25,7 @@ const SignUpScreen = () => {
         );
 
         // // create a channel
-        const channel = client.channel("messaging", "notjustdev", {
+        const channel = client.channel("livestream", "Live", {
             name: "notJust.dev",
         });
         await channel.create();

@@ -1,14 +1,35 @@
-import { StyleSheet } from 'react-native';
+import React, { useEffect, useState } from "react";
+import { StyleSheet, FlatList } from "react-native";
+import { useChatContext } from "stream-chat-expo";
 
-import EditScreenInfo from '../components/EditScreenInfo';
-import { Text, View } from '../components/Themed';
+import { View } from "../components/Themed";
+import UserListItem from "../components/UserListItem";
 
 export default function TabTwoScreen() {
+  const [users, setUsers] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { client } = useChatContext();
+
+  const fetchUsers = async () => {
+    setIsLoading(true);
+    const response = await client.queryUsers({});
+    setUsers(response.users);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="/screens/TabTwoScreen.tsx" />
+      <FlatList
+        data={users}
+        renderItem={({ item }) => <UserListItem user={item} />}
+        refreshing={isLoading}
+        onRefresh={fetchUsers}
+      />
     </View>
   );
 }
@@ -16,16 +37,7 @@ export default function TabTwoScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+    alignItems: "stretch",
+    justifyContent: "center",
   },
 });
